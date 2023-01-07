@@ -21,11 +21,16 @@ Route::get('/', function () {
     'canLogin' => Route::has('login'),
     'canRegister' => Route::has('register')
   ]);
-});
+})->name('welcome');
 
 Route::get('/dashboard', function () {
-  return Inertia::render('Dashboard');
+  if (auth()->user()->is_admin) return redirect(route('admin.dashboard'));
+  return Inertia::render('User/Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['not.role:super_admin', 'not.role:admin'])->group(function () {
+  
+});
 
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

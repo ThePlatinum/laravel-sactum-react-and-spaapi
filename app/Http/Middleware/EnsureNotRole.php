@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureHasRole
+class EnsureNotRole
 {
   /**
    * Handle an incoming request.
@@ -16,7 +16,7 @@ class EnsureHasRole
    */
   public function handle(Request $request, Closure $next, $role)
   {
-    if (!$request->user()->hasRole($role)) 
+    if ($request->user()->hasRole($role))
       return redirect()->route('welcome')->with('error', "No, you can't do that.");
     return $next($request);
   }
